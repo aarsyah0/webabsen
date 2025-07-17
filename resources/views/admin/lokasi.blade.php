@@ -1,19 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Lokasi Sekolah</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-<div class="container mt-5">
-    <h1>Edit Lokasi Sekolah</h1>
-    <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary mb-3">Kembali ke Dashboard</a>
+@extends('admin.layout')
+@section('content')
+    <h1 class="mb-4">Edit Lokasi Sekolah</h1>
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
-    <form action="{{ route('admin.update_lokasi') }}" method="POST">
+    <form action="{{ route('admin.update_lokasi') }}" method="POST" class="card p-4 shadow-sm" style="max-width:500px;">
         @csrf
         <div class="mb-3">
             <label for="lat" class="form-label">Latitude</label>
@@ -28,7 +19,6 @@
             <input type="number" class="form-control" id="radius" name="radius" value="{{ $radius }}" required min="1">
         </div>
         <button type="submit" class="btn btn-primary">Simpan</button>
+        <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary ms-2">Batal</a>
     </form>
-</div>
-</body>
-</html>
+@endsection

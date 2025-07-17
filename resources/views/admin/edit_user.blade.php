@@ -1,16 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit User</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-<div class="container mt-5">
-    <h1>Edit User</h1>
-    <a href="{{ route('admin.users') }}" class="btn btn-secondary mb-3">Kembali ke Manajemen User</a>
-    <form action="{{ route('admin.update_user', $user->id) }}" method="POST">
+@extends('admin.layout')
+@section('content')
+    <h1 class="mb-4">Edit User</h1>
+    <form action="{{ route('admin.update_user', $user->id) }}" method="POST" class="card p-4 shadow-sm" style="max-width:500px;">
         @csrf
         <div class="mb-3">
             <label for="name" class="form-label">Nama</label>
@@ -21,7 +12,6 @@
             <input type="email" class="form-control" id="email" name="email" value="{{ $user->email }}" required>
         </div>
         <button type="submit" class="btn btn-primary">Simpan</button>
+        <a href="{{ route('admin.users') }}" class="btn btn-secondary ms-2">Batal</a>
     </form>
-</div>
-</body>
-</html>
+@endsection
