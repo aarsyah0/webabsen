@@ -67,7 +67,6 @@
                                 <i class="bi bi-person-circle me-2"></i>
                                 {{ $presensi->user->name }}
                             </div>
-                            <small class="text-muted">{{ \Carbon\Carbon::parse($presensi->waktu)->format('H:i:s') }}</small>
                         </li>
                     @endforeach
                 </ul>

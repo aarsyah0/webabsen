@@ -46,9 +46,17 @@ class PresensiController extends Controller
             return response()->json(['error' => 'Diluar area sekolah'], 403);
         }
 
+        // Cek apakah user sudah presensi hari ini
+        $today = now()->toDateString();
+        $alreadyPresent = $user->presensis()->whereDate('waktu', $today)->exists();
+
+        if ($alreadyPresent) {
+            return response()->json(['error' => 'Anda sudah melakukan presensi hari ini'], 403);
+        }
+
         $presensi = Presensi::create([
             'user_id' => $user->id,
-            'waktu'   => now(),
+            'waktu'   => now(), // Sudah otomatis waktu Indonesia
             'lat'     => $lat,
             'long'    => $long,
             'status'  => 'hadir',
@@ -59,6 +67,7 @@ class PresensiController extends Controller
             'data'    => $presensi
         ]);
     }
+
 
     public function index(Request $request)
     {
