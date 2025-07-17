@@ -5,15 +5,38 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Setting;
+use App\Models\Presensi;
 
 class AdminController extends Controller
 {
-    public function dashboard()
+     public function dashboard()
     {
+        // Total user
         $userCount = User::count();
-        return view('admin.dashboard', compact('userCount'));
-    }
 
+        // Presensi hari ini
+        $todayPresensi = Presensi::with('user') // pastikan relasi presensi->user ada
+            ->whereDate('waktu', now()->toDateString())
+            ->orderBy('waktu', 'asc')
+            ->get();
+
+        $todayPresensiCount = $todayPresensi->count();
+
+        // Ambil setting koordinat dan radius
+        $settings = Setting::pluck('value', 'key')->all();
+        $setting = [
+            'school_lat'    => $settings['school_lat']    ?? '-',
+            'school_long'   => $settings['school_long']   ?? '-',
+            'school_radius' => $settings['school_radius'] ?? '-',
+        ];
+
+        return view('admin.dashboard', compact(
+            'userCount',
+            'todayPresensiCount',
+            'todayPresensi',
+            'setting'
+        ));
+    }
     public function users()
     {
         $users = User::all();

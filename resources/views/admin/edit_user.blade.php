@@ -1,17 +1,52 @@
 @extends('admin.layout')
+
 @section('content')
-    <h1 class="mb-4">Edit User</h1>
-    <form action="{{ route('admin.update_user', $user->id) }}" method="POST" class="card p-4 shadow-sm" style="max-width:500px;">
-        @csrf
-        <div class="mb-3">
-            <label for="name" class="form-label">Nama</label>
-            <input type="text" class="form-control" id="name" name="name" value="{{ $user->name }}" required>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 fw-bold m-0">Edit User</h1>
+        <small class="text-muted">{{ now()->format('l, j F Y') }}</small>
+    </div>
+
+    @if ($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-        <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" name="email" value="{{ $user->email }}" required>
+    @endif
+
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card card-custom shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-4">Form Edit User</h5>
+                    <form action="{{ route('admin.update_user', $user->id) }}" method="POST">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Nama Lengkap</label>
+                            <input type="text" class="form-control form-control-lg" id="name" name="name"
+                                value="{{ old('name', $user->name) }}" required placeholder="Masukkan nama lengkap">
+                        </div>
+                        <div class="mb-4">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control form-control-lg" id="email" name="email"
+                                value="{{ old('email', $user->email) }}" required placeholder="Masukkan email">
+                        </div>
+
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-warning btn-lg me-2">
+                                <i class="bi bi-save me-1"></i>Simpan Perubahan
+                            </button>
+                            <a href="{{ route('admin.users') }}" class="btn btn-outline-secondary btn-lg">
+                                <i class="bi bi-x-circle me-1"></i>Batal
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary">Simpan</button>
-        <a href="{{ route('admin.users') }}" class="btn btn-secondary ms-2">Batal</a>
-    </form>
+    </div>
 @endsection
