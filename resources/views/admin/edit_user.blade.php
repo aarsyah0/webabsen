@@ -35,6 +35,14 @@
                             <input type="email" class="form-control form-control-lg" id="email" name="email"
                                 value="{{ old('email', $user->email) }}" required placeholder="Masukkan email">
                         </div>
+                        <div class="mb-3">
+                            <label for="nisn" class="form-label">NISN</label>
+                            <input type="text" class="form-control" id="nisn" name="nisn" value="{{ old('nisn', $user->nisn) }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="kelas" class="form-label">Kelas</label>
+                            <input type="text" class="form-control" id="kelas" name="kelas" value="{{ old('kelas', $user->kelas) }}" required>
+                        </div>
 
                         <div class="d-flex justify-content-end">
                             <button type="submit" class="btn btn-warning btn-lg me-2">

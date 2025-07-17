@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('presensis', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->timestamp('waktu');
+            $table->datetime('waktu');
             $table->decimal('lat', 10, 7);
             $table->decimal('long', 10, 7);
             $table->string('status'); // hadir, telat, dsb

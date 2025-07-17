@@ -22,4 +22,12 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::post('/users/{id}/delete', [AdminController::class, 'deleteUser'])->name('admin.delete_user');
     Route::get('/lokasi', [AdminController::class, 'lokasi'])->name('admin.lokasi');
     Route::post('/lokasi', [AdminController::class, 'updateLokasi'])->name('admin.update_lokasi');
+
+    // Manajemen Absen
+    Route::get('/absen', [AdminController::class, 'absen'])->name('admin.absen');
+    Route::get('/absen/create', [AdminController::class, 'createAbsen'])->name('admin.absen_create');
+    Route::post('/absen/create', [AdminController::class, 'storeAbsen'])->name('admin.absen_store');
+    Route::get('/absen/{id}/edit', [AdminController::class, 'editAbsen'])->name('admin.absen_edit');
+    Route::post('/absen/{id}/edit', [AdminController::class, 'updateAbsen'])->name('admin.absen_update');
+    Route::post('/absen/{id}/delete', [AdminController::class, 'deleteAbsen'])->name('admin.absen_delete');
 });

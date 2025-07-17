@@ -51,6 +51,7 @@
             transition: background 0.3s;
             display: flex;
             align-items: center;
+            position: relative;
         }
 
         .sidebar .nav-link:hover {
@@ -75,6 +76,33 @@
 
         .sidebar.collapsed .link-text {
             opacity: 0;
+            width: 0;
+            margin: 0;
+            pointer-events: none;
+        }
+
+        .sidebar .nav-link {
+            position: relative;
+        }
+
+        .sidebar.collapsed .nav-link {
+            justify-content: center;
+        }
+
+        .sidebar.collapsed .nav-link[title]:hover::after {
+            content: attr(title);
+            position: absolute;
+            left: 60px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #222;
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 6px;
+            white-space: nowrap;
+            font-size: 0.95rem;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         }
 
         /* Top Navbar */
@@ -156,28 +184,35 @@
         <ul class="nav nav-pills flex-column mb-auto">
             <li class="nav-item">
                 <a href="{{ route('admin.dashboard') }}"
-                    class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                    class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" title="Dashboard">
                     <i class="bi bi-speedometer2"></i>
                     <span class="link-text">Dashboard</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a href="{{ route('admin.users') }}"
-                    class="nav-link {{ request()->routeIs('admin.users') ? 'active' : '' }}">
+                    class="nav-link {{ request()->routeIs('admin.users') ? 'active' : '' }}" title="Manajemen User">
                     <i class="bi bi-people-fill"></i>
                     <span class="link-text">Manajemen User</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a href="{{ route('admin.lokasi') }}"
-                    class="nav-link {{ request()->routeIs('admin.lokasi') ? 'active' : '' }}">
+                    class="nav-link {{ request()->routeIs('admin.lokasi') ? 'active' : '' }}" title="Lokasi Sekolah">
                     <i class="bi bi-geo-alt-fill"></i>
                     <span class="link-text">Lokasi Sekolah</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="{{ route('admin.absen') }}"
+                    class="nav-link {{ request()->routeIs('admin.absen') ? 'active' : '' }}" title="Manajemen Absen">
+                    <i class="bi bi-calendar-check"></i>
+                    <span class="link-text">Manajemen Absen</span>
+                </a>
+            </li>
         </ul>
         <div class="mt-auto">
-            <a href="{{ route('admin.logout') }}" class="nav-link text-light">
+            <a href="{{ route('admin.logout') }}" class="nav-link text-light" title="Logout">
                 <i class="bi bi-box-arrow-right"></i>
                 <span class="link-text">Logout</span>
             </a>

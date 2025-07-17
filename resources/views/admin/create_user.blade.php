@@ -40,6 +40,14 @@
                             <input type="password" class="form-control form-control-lg" id="password" name="password"
                                 required placeholder="Masukkan password">
                         </div>
+                        <div class="mb-3">
+                            <label for="nisn" class="form-label">NISN</label>
+                            <input type="text" class="form-control" id="nisn" name="nisn" value="{{ old('nisn') }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="kelas" class="form-label">Kelas</label>
+                            <input type="text" class="form-control" id="kelas" name="kelas" value="{{ old('kelas') }}" required>
+                        </div>
                         <div class="mb-4">
                             <label for="role" class="form-label">Role</label>
                             <select class="form-select form-select-lg" id="role" name="role" required>

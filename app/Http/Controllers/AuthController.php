@@ -11,15 +11,18 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
-        if (!Auth::attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        $request->validate([
+            'nisn' => 'required',
+            'password' => 'required',
+        ]);
+        $user = \App\Models\User::where('nisn', $request->nisn)->first();
+        if (!$user || !\Hash::check($request->password, $user->password)) {
+            return response()->json(['error' => 'NISN atau password salah'], 401);
         }
-        $user = Auth::user();
-        $token = $user->createToken('mobile')->plainTextToken;
+        $token = $user->createToken('auth_token')->plainTextToken;
         return response()->json([
-            'user' => $user,
             'token' => $token,
+            'user' => $user,
         ]);
     }
 
