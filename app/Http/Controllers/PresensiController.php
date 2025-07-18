@@ -25,28 +25,17 @@ class PresensiController extends Controller
     }
 
     public function store(Request $request)
-    {
+{
+    $user = $request->user();
+
+    // Jika ada status sakit/izin, proses tanpa cek lokasi
+    if ($request->has('status') && in_array($request->status, ['sakit', 'izin'])) {
+        // Validasi opsional lat/long
         $request->validate([
-            'lat'  => 'required|numeric',
-            'long' => 'required|numeric',
+            'lat' => 'nullable|numeric',
+            'long' => 'nullable|numeric',
         ]);
-
-        // Pastikan setting ada
-        if (is_null($this->schoolLat) || is_null($this->schoolLong) || is_null($this->radius)) {
-            return response()->json(['error' => 'Konfigurasi wilayah sekolah belum diatur'], 500);
-        }
-
-        $user = $request->user();
-        $lat  = $request->lat;
-        $long = $request->long;
-
-        $distance = $this->haversine($lat, $long, $this->schoolLat, $this->schoolLong);
-
-        if ($distance > $this->radius) {
-            return response()->json(['error' => 'Diluar area sekolah'], 403);
-        }
-
-        // Cek apakah user sudah presensi hari ini
+        // Cek sudah presensi hari ini
         $today = now()->toDateString();
         $alreadyPresent = $user->presensis()->whereDate('waktu', $today)->exists();
 
@@ -54,19 +43,68 @@ class PresensiController extends Controller
             return response()->json(['error' => 'Anda sudah melakukan presensi hari ini'], 403);
         }
 
-        $presensi = Presensi::create([
+        $presensiData = [
             'user_id' => $user->id,
-            'waktu'   => now(), // Sudah otomatis waktu Indonesia
-            'lat'     => $lat,
-            'long'    => $long,
-            'status'  => 'hadir',
-        ]);
+            'waktu'   => now(),
+            'status'  => $request->status,
+        ];
+        // Simpan lat/long jika ada
+        if ($request->filled('lat')) {
+            $presensiData['lat'] = $request->lat;
+        }
+        if ($request->filled('long')) {
+            $presensiData['long'] = $request->long;
+        }
+
+        $presensi = Presensi::create($presensiData);
 
         return response()->json([
-            'message' => 'Presensi berhasil',
+            'message' => 'Presensi ' . $request->status . ' berhasil',
             'data'    => $presensi
         ]);
     }
+
+    // ...lanjutkan kode lama untuk presensi hadir (lokasi)
+    $request->validate([
+        'lat'  => 'required|numeric',
+        'long' => 'required|numeric',
+    ]);
+
+    // Pastikan setting ada
+    if (is_null($this->schoolLat) || is_null($this->schoolLong) || is_null($this->radius)) {
+        return response()->json(['error' => 'Konfigurasi wilayah sekolah belum diatur'], 500);
+    }
+
+    $lat  = $request->lat;
+    $long = $request->long;
+
+    $distance = $this->haversine($lat, $long, $this->schoolLat, $this->schoolLong);
+
+    if ($distance > $this->radius) {
+        return response()->json(['error' => 'Lokasi di luar jangkauan'], 403);
+    }
+
+    // Cek apakah user sudah presensi hari ini
+    $today = now()->toDateString();
+    $alreadyPresent = $user->presensis()->whereDate('waktu', $today)->exists();
+
+    if ($alreadyPresent) {
+        return response()->json(['error' => 'Anda sudah melakukan presensi hari ini'], 403);
+    }
+
+    $presensi = Presensi::create([
+        'user_id' => $user->id,
+        'waktu'   => now(),
+        'lat'     => $lat,
+        'long'    => $long,
+        'status'  => 'hadir',
+    ]);
+
+    return response()->json([
+        'message' => 'Presensi berhasil',
+        'data'    => $presensi
+    ]);
+}
 
 
     public function index(Request $request)
